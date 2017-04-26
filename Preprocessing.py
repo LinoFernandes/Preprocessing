@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 import os
+import datetime as dt
 
 Window = np.array([90, 180, 365])
 for window in Window:
@@ -9,15 +10,15 @@ for window in Window:
         path = 'C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFolds\\' + str(window) + 'd_FOLDS\\S' + str(seed)
         sys.path.append(path)
         for fold in range(1,11):
-            TrainPD = pd.read_csv(path + '\\' + str(window) + 'd_FOLDS_train_' + str(fold) + '.csv')
-            TestPD = pd.read_csv(path + '\\' + str(window) + 'd_FOLDS_test_' + str(fold) + '.csv')
-            Train = TrainPD.values
-            Test = TestPD.values
-
+            try:
+                TrainPD = pd.read_csv(path + '\\' + str(window) + 'd_FOLDS_train_' + str(fold) + '.csv')
+                TestPD = pd.read_csv(path + '\\' + str(window) + 'd_FOLDS_test_' + str(fold) + '.csv')
+            except FileNotFoundError:
+                continue
             auxTrain = TrainPD.columns[pd.isnull(TrainPD).any()].tolist() #Columns with nans
             auxTest = TestPD.columns[pd.isnull(TestPD).any()].tolist() #Columns with nans
             from sklearn.preprocessing import Imputer
-            imputer = Imputer(missing_values='NaN', strategy='mean',axis=0);
+            imputer = Imputer(missing_values='NaN', strategy='mean',axis=0)
             TrainPD[auxTrain] = imputer.fit_transform(TrainPD[auxTrain])
             TestPD[auxTest] = imputer.fit_transform(TestPD[auxTest])
 
@@ -27,18 +28,28 @@ for window in Window:
             TestPD['Evolution'] = LE.fit_transform(TestPD['Evolution'])
 
             CatCols = [5, 7, 8]
+            CatCols=TrainPD[TrainPD.columns.values[CatCols]]
             for col in CatCols:
-                dummies = pd.get_dummies(TrainPD[TrainPD.columns.values[col]])
+                dummiesTrain = pd.get_dummies(TrainPD[col], drop_first=True)
+                dummiesTest = pd.get_dummies(TestPD[col], drop_first=True)
+                aux = TrainPD.columns.get_loc(col)
+                TrainPD = TrainPD.drop(col, 1)
+                TestPD = TestPD.drop(col,1)
+                i = 0
+                for dummy in dummiesTrain.columns.values:
+                    TrainPD.insert(aux + i, dummy, dummiesTrain[dummy])
+                    i += 1
+                i = 0
+                for dummy in dummiesTest.columns.values:
+                    TestPD.insert(aux + i, dummy, dummiesTest[dummy])
+                    i += 1
 
-
-            NewTrain = pd.DataFrame(Train, index = None, columns = TrainPD.columns.values)
-            NewTest = pd.DataFrame(Test, index = None, columns = TestPD.columns.values)
-            directory = ('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFolds\\' + str(window) + 'd_FOLDS\\S' + str(seed) + '\\')
+            directory = ('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFoldsFinal\\' + str(window) + 'd_FOLDS\\S' + str(seed) + '\\')
             if not os.path.exists(directory):
                 os.makedirs(directory)
             filenameTrain = str(window) + 'd_FOLDS_train_' + str(fold) + '.csv'
             filenameTest = str(window) + 'd_FOLDS_test_' + str(fold) + '.csv'
             os.path.join(directory, filenameTrain)
-            NewTrain.to_csv(directory+filenameTrain, sep=',')
+            TrainPD.to_csv(directory+filenameTrain, sep=',',index=False)
             os.path.join(directory, filenameTest)
-            NewTest.to_csv(directory+filenameTest, sep=',')
+            TestPD.to_csv(directory+filenameTest, sep=',',index=False)
