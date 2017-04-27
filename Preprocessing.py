@@ -30,8 +30,14 @@ for window in Window:
             CatCols = [5, 7, 8]
             CatCols=TrainPD[TrainPD.columns.values[CatCols]]
             for col in CatCols:
-                dummiesTrain = pd.get_dummies(TrainPD[col], drop_first=True)
-                dummiesTest = pd.get_dummies(TestPD[col], drop_first=True)
+                if col == 'El Escorial reviewed criteria':
+                    Words = ['PLS', 'PMA', 'def', 'pos', 'pro', 'sus']
+                elif col == 'Envolved segment - 1st symptoms':
+                    Words = ['AR', 'B', 'B,AR', 'LL', 'UL']
+                else:
+                    Words = ['CROSSED', 'hemi', 'hemi cruz', 'hemi para', 'para', 'para cruz']
+                dummiesTrain = pd.get_dummies(TrainPD[col], prefix=Words, drop_first=True)
+                dummiesTest = pd.get_dummies(TestPD[col], prefix=Words, drop_first=True)
                 aux = TrainPD.columns.get_loc(col)
                 TrainPD = TrainPD.drop(col, 1)
                 TestPD = TestPD.drop(col,1)
