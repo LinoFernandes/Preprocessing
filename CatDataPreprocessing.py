@@ -59,6 +59,12 @@ for window in Window:
                         Test[row,col] = dt.datetime.strptime(Test[row,col], '%d/%m/%Y').date().toordinal()
                     except ValueError:
                         Test[row,col] = np.NaN
+
+            TrainInf = TrainPD['Days-Until-NIV'] == np.inf
+            TestInf = TestPD['Days-Until-NIV'] == np.inf
+            Train[TrainInf, 37] = np.NaN
+            Test[TestInf, 37] = np.NaN
+            
             if TestPD[TestPD.columns].isnull().all().any() or TrainPD[TrainPD.columns].isnull().all().any():
                 pass
             else:

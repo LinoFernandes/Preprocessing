@@ -22,6 +22,11 @@ for window in Window:
             TrainPD[auxTrain] = imputer.fit_transform(TrainPD[auxTrain])
             TestPD[auxTest] = imputer.fit_transform(TestPD[auxTest])
 
+            # from sklearn.preprocessing import StandardScaler
+            # SC = StandardScaler()
+            # TrainPD[auxTrain] = SC.fit_transform(TrainPD[auxTrain].values)
+            # TestPD[auxTest] = SC.fit_transform(TestPD[auxTest].values)
+
             from sklearn.preprocessing import LabelEncoder
             LE = LabelEncoder()
             TrainPD['Evolution'] = LE.fit_transform(TrainPD['Evolution'])
@@ -31,24 +36,36 @@ for window in Window:
             CatCols=TrainPD[TrainPD.columns.values[CatCols]]
             for col in CatCols:
                 if col == 'El Escorial reviewed criteria':
-                    Words = ['PLS', 'PMA', 'def', 'pos', 'pro', 'sus']
+                    Words = ['PMA', 'def', 'pos', 'pro', 'sus']
                 elif col == 'Envolved segment - 1st symptoms':
-                    Words = ['AR', 'B', 'B,AR', 'LL', 'UL']
+                    Words = ['B', 'B,AR', 'LL', 'UL']
                 else:
-                    Words = ['CROSSED', 'hemi', 'hemi cruz', 'hemi para', 'para', 'para cruz']
-                dummiesTrain = pd.get_dummies(TrainPD[col], prefix=Words, drop_first=True)
-                dummiesTest = pd.get_dummies(TestPD[col], prefix=Words, drop_first=True)
-                aux = TrainPD.columns.get_loc(col)
+                    Words = ['hemi', 'hemi cruz', 'hemi para', 'para', 'para cruz']
+                dummiesTrain = pd.get_dummies(TrainPD[col], columns=Words, drop_first=True)
+                dummiesTest = pd.get_dummies(TestPD[col], columns=Words, drop_first=True)
+                i = 0
+                auxTrain = np.zeros(shape=[len(TrainPD), len(Words)])
+                auxTest = np.zeros(shape=[len(TestPD), len(Words)])
+                for word in Words:
+                    CheckTrain = TrainPD[col] == word
+                    CheckTest = TestPD[col] == word
+                    auxTrain[CheckTrain, i] = 1
+                    auxTest[CheckTest,i] = 1
+                    i += 1
+                ColLoc = TrainPD.columns.get_loc(col)
                 TrainPD = TrainPD.drop(col, 1)
                 TestPD = TestPD.drop(col,1)
                 i = 0
-                for dummy in dummiesTrain.columns.values:
-                    TrainPD.insert(aux + i, dummy, dummiesTrain[dummy])
+                for dummy in range(0,len(Words)):
+                    TrainPD.insert(ColLoc + i, Words[dummy], auxTrain[:,dummy])
+                    TestPD.insert(ColLoc + i, Words[dummy], auxTest[:, dummy])
                     i += 1
-                i = 0
-                for dummy in dummiesTest.columns.values:
-                    TestPD.insert(aux + i, dummy, dummiesTest[dummy])
-                    i += 1
+
+            from sklearn.preprocessing import MinMaxScaler
+            SC = MinMaxScaler()
+            SCCol=[x for x in TrainPD.columns.values if x not in ['Name','Evolution']]
+            TrainPD[SCCol] = SC.fit_transform(TrainPD.ix[:, SCCol])
+            TestPD[SCCol] = SC.fit_transform(TestPD.ix[:, SCCol])
 
             directory = ('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFoldsFinal\\' + str(window) + 'd_FOLDS\\S' + str(seed) + '\\')
             if not os.path.exists(directory):

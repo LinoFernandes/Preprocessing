@@ -1,27 +1,17 @@
+# Grid Search for Algorithm Tuning
 import numpy as np
-import pandas as pd
-from sklearn.naive_bayes import GaussianNB
-import sys
-Window = np.array([90, 180, 365])
-
-def categoricalData(data):
-    from scipy.stats import mode
-    Counts = mode(data)
-    return Counts.mode[0]
-
-for window in Window:
-    for seed in range(1,2):
-        path = '/Users/Lino/PycharmProjects/Preprocessing/FOLDS/' + str(window) + 'd_FOLDS/S' + str(seed)
-        sys.path.append(path)
-        for fold in range(1,2):
-            #print(path + '/' + str(window) + 'd_FOLDS_train_' + str(fold))
-            Train = pd.read_csv(path + '/' + str(window) + 'd_FOLDS_train_' + str(fold) + '.csv')
-            Test = pd.read_csv(path + '/' + str(window) + 'd_FOLDS_test_' + str(fold) + '.csv')
-            X = Train.iloc[:,:-2].values
-            Y = Train.iloc[:,np.shape(Train)[1]-2].values
-            #print(np.shape(X))
-            print(X)
-            #model = GaussianNB()
-            #pred = model.partial_fit()
-
-
+from sklearn import datasets
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import GridSearchCV
+# load the diabetes datasets
+dataset = datasets.load_diabetes()
+# prepare a range of alpha values to test
+alphas = np.array([1,0.1,0.01,0.001,0.0001,0])
+# create and fit a ridge regression model, testing each alpha
+model = Ridge()
+grid = GridSearchCV(estimator=model, param_grid=dict(alpha=alphas))
+grid.fit(dataset.data, dataset.target)
+print(grid)
+# summarize the results of the grid search
+print(grid.best_score_)
+print(grid.best_estimator_.alpha)
