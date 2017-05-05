@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 import sys
-from sklearn.feature_selection import RFE
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 import os
@@ -31,9 +32,12 @@ for window in Window:
                 continue
 
             # Create the RFE object and rank each pixel
-            NB = GaussianNB()
-            svc = SVC(C = 1, kernel = 'linear')
-            rfe = RFE(estimator=svc)
-            rfe.fit(TrainPD.ix[:, TrainPD.columns != 'Evolution'], TrainPD.ix[:, 'Evolution'])
-            ranking = rfe.ranking_()
-            print(ranking)
+            #NB = GaussianNB()
+            #svc = SVC(C = 1, kernel = 'linear')
+            #rfe = RFE(estimator=svc)
+            #rfe.fit(TrainPD.ix[:, TrainPD.columns != 'Evolution'], TrainPD.ix[:, 'Evolution'])
+            #ranking = rfe.ranking_()
+            #print(ranking)
+
+            X_new = SelectKBest(chi2, 10).fit_transform(TrainPD.ix[:, TrainPD.columns != 'Evolution'], TrainPD.ix[:, 'Evolution'])
+            print(X_new)
