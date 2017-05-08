@@ -29,15 +29,16 @@ for window in Window:
             TrainPD[auxTrain] = imputer.fit_transform(TrainPD[auxTrain])
             TestPD[auxTest] = imputer.fit_transform(TestPD[auxTest])
 
-            auxTrain = np.zeros(shape=[len(TrainPD), 1])
-            auxTest = np.zeros(shape=[len(TestPD), 1])
-            CheckTrain = TrainPD['Evolution'] == 'Y'
-            CheckTest = TestPD['Evolution'] == 'Y'
-            auxTrain[CheckTrain,] = 1
-            auxTest[CheckTest,] = 1
-            TrainPD['Evolution'] = auxTrain
-            TestPD['Evolution'] = auxTest
-            #
+            # from sklearn.preprocessing import StandardScaler
+            # SC = StandardScaler()
+            # TrainPD[auxTrain] = SC.fit_transform(TrainPD[auxTrain].values)
+            # TestPD[auxTest] = SC.fit_transform(TestPD[auxTest].values)
+
+            from sklearn.preprocessing import LabelEncoder
+            LE = LabelEncoder()
+            TrainPD['Evolution'] = LE.fit_transform(TrainPD['Evolution'])
+            TestPD['Evolution'] = LE.fit_transform(TestPD['Evolution'])
+
             CatCols = [5, 7, 8]
             CatCols=TrainPD[TrainPD.columns.values[CatCols]]
             for col in CatCols:
@@ -47,43 +48,31 @@ for window in Window:
                     Words = ['B', 'B,AR', 'LL', 'UL']
                 else:
                     Words = ['hemi', 'hemi cruz', 'hemi para', 'para', 'para cruz']
-                auxTrain = np.zeros(shape=[len(TrainPD), 1])
-                auxTest = np.zeros(shape=[len(TestPD), 1])
+                dummiesTrain = pd.get_dummies(TrainPD[col], columns=Words, drop_first=True)
+                dummiesTest = pd.get_dummies(TestPD[col], columns=Words, drop_first=True)
+                i = 0
+                auxTrain = np.zeros(shape=[len(TrainPD), len(Words)])
+                auxTest = np.zeros(shape=[len(TestPD), len(Words)])
                 for word in Words:
                     CheckTrain = TrainPD[col] == word
                     CheckTest = TestPD[col] == word
-                    auxTrain[CheckTrain,] = Words.index(word)
-                    auxTest[CheckTest,] = Words.index(word)
-                TrainPD[col] = auxTrain
-                TestPD[col] = auxTest
+                    auxTrain[CheckTrain, i] = 1
+                    auxTest[CheckTest,i] = 1
+                    i += 1
+                ColLoc = TrainPD.columns.get_loc(col)
+                TrainPD = TrainPD.drop(col, 1)
+                TestPD = TestPD.drop(col,1)
+                i = 0
+                for dummy in range(0,len(Words)):
+                    TrainPD.insert(ColLoc + i, Words[dummy], auxTrain[:,dummy])
+                    TestPD.insert(ColLoc + i, Words[dummy], auxTest[:, dummy])
+                    i += 1
 
-
-                # dummiesTrain = pd.get_dummies(TrainPD[col], columns=Words, drop_first=True)
-                # dummiesTest = pd.get_dummies(TestPD[col], columns=Words, drop_first=True)
-                # i = 0
-                # auxTrain = np.zeros(shape=[len(TrainPD), len(Words)])
-                # auxTest = np.zeros(shape=[len(TestPD), len(Words)])
-                # for word in Words:
-                #     CheckTrain = TrainPD[col] == word
-                #     CheckTest = TestPD[col] == word
-                #     auxTrain[CheckTrain, i] = 1
-                #     auxTest[CheckTest,i] = 1
-                #     i += 1
-                # ColLoc = TrainPD.columns.get_loc(col)
-                # TrainPD = TrainPD.drop(col, 1)
-                # TestPD = TestPD.drop(col,1)
-                # i = 0
-                # for dummy in range(0,len(Words)):
-                #     TrainPD.insert(ColLoc + i, Words[dummy], auxTrain[:,dummy])
-                #     TestPD.insert(ColLoc + i, Words[dummy], auxTest[:, dummy])
-                #     i += 1
-
-            # from sklearn.preprocessing import MinMaxScaler
-            # SC = MinMaxScaler()
-            # SCCol=[x for x in TrainPD.columns.values if x not in ['Name','Evolution']]
-            # TrainPD[SCCol] = SC.fit_transform(TrainPD.ix[:, SCCol])
-            # TestPD[SCCol] = SC.fit_transform(TestPD.ix[:, SCCol])
-
+            from sklearn.preprocessing import MinMaxScaler
+            SC = MinMaxScaler()
+            SCCol=[x for x in TrainPD.columns.values if x not in ['Name','Evolution']]
+            TrainPD[SCCol] = SC.fit_transform(TrainPD.ix[:, SCCol])
+            TestPD[SCCol] = SC.fit_transform(TestPD.ix[:, SCCol])
             if sys.platform == 'win32':
                 directory = ('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFoldsFinal\\' + str(window) + 'd_FOLDS\\S' + str(seed) + '\\')
             elif sys.platform == 'darwin':
