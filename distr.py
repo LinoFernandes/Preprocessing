@@ -21,5 +21,7 @@ for window in Window:
         Histogram = []
         for whatever in UniqueSnapshots:
             Histogram.append(len(Snapshots[Snapshots == whatever]))
+        print(len([i for i in range(0,len(Histogram)) if Histogram[i]>3]))
         plt.hist(Histogram)
         plt.savefig('foo' + str(window) + '.png')
+        plt.gcf().clear()
