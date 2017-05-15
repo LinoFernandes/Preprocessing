@@ -2,7 +2,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+<<<<<<< HEAD
 from scipy import stats
+=======
+>>>>>>> 2e0f5fc01d8e0abf04c6680266cb17afd2ff9a5c
 import os
 
 
@@ -35,12 +38,18 @@ NotNaN = [i for i in range(0, len(Score)) if not np.isnan(Score[i]) or Score[i] 
 hist, bins = np.histogram(Score[NotNaN], bins=1000)
 freq = 5
 hist[np.where(hist <= freq)] = 0
+<<<<<<< HEAD
 z1=Score[NotNaN]
 z=np.percentile(z1, np.arange(0, 100, 25))
+=======
+z=np.percentile(Score[NotNaN], np.arange(0, 100, 25))
+
+>>>>>>> 2e0f5fc01d8e0abf04c6680266cb17afd2ff9a5c
 # Plot
 bins = bins[hist != 0]
 width = 0.7 * (bins[1] - bins[0])
 center = (bins[:-1] + bins[1:]) / 2
+<<<<<<< HEAD
 print(bins)
 print(center)
 plt.bar(bins, hist[hist!=0], align='center', width=width)
@@ -49,4 +58,12 @@ for line in range(1,len(z)):
     plt.axvline(x=z[line], color = 'r')
 plt.xlabel('Score')
 plt.ylabel('Distr')
+=======
+print(len(bins))
+print(len(hist[hist!=0]))
+print(center)
+plt.bar(bins, hist[hist!=0], align='center', width=width)
+for line in z:
+    plt.axvline(x=line)
+>>>>>>> 2e0f5fc01d8e0abf04c6680266cb17afd2ff9a5c
 plt.savefig('TimeEvo.png')
