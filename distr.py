@@ -21,7 +21,17 @@ for window in Window:
         Histogram = []
         for whatever in UniqueSnapshots:
             Histogram.append(len(Snapshots[Snapshots == whatever]))
-        print(len([i for i in range(0,len(Histogram)) if Histogram[i]>3]))
-        plt.hist(Histogram)
+        z=[i for i in range(0,len(Histogram)) if Histogram[i] == 17]
+        print(z)
+        bins=np.arange(0,20,1)
+        plt.hist(Histogram,bins,align='left',rwidth=0.5)
+        bins=np.arange(0,20,1)
+        plt.xticks(bins[:-1])
+        plt.xlabel('Número de pontos')
+        plt.ylabel('Distribuição_' + str(window) + 'd')
         plt.savefig('foo' + str(window) + '.png')
-        plt.gcf().clear()
+        plt.clf()
+
+        z = [i for i in range(0,len(Histogram)) if Histogram[i]>=3]
+        print('# ' + str(window) + 'd: ' + str(len(UniqueSnapshots)))
+        print(len(z))
