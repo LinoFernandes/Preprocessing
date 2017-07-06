@@ -21,7 +21,6 @@ for window in Window:
         Histogram = []
         for whatever in UniqueSnapshots:
             Histogram.append(len(Snapshots[Snapshots == whatever]))
-<<<<<<< HEAD
         z=[i for i in range(0,len(Histogram)) if Histogram[i] == 17]
         print(z)
         bins=np.arange(0,20,1)
@@ -36,7 +35,5 @@ for window in Window:
         z = [i for i in range(0,len(Histogram)) if Histogram[i]>=3]
         print('# ' + str(window) + 'd: ' + str(len(UniqueSnapshots)))
         print(len(z))
-=======
-        plt.hist(Histogram)
-        plt.savefig('foo' + str(window) + '.png')
->>>>>>> 2e0f5fc01d8e0abf04c6680266cb17afd2ff9a5c
+        #plt.hist(Histogram)
+        #plt.savefig('foo' + str(window) + '.png')

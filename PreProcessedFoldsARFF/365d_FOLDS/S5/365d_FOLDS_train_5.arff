@@ -1,0 +1,36 @@
+@relation 365d_FOLDS_train_5
+
+@attribute Name numeric
+@attribute Gender numeric
+@attribute BMI numeric
+@attribute MND numeric
+@attribute Age at onset numeric
+@attribute El Escorial reviewed criteria {PMA,sus,pos,PLS,pro,def,def}
+@attribute Onset form numeric
+@attribute Envolved segment - 1st symptoms {UL,B,AR,AR,B,LL,LL}
+@attribute Evolution patternB {hemi para,para,para cruz,hemi cruz,hemi,CROSSED,CROSSED}
+@attribute 1st symptoms - 1st visit numeric
+@attribute ALS-FRS numeric
+@attribute ALS-FRS-R numeric
+@attribute ALS-FRSb numeric
+@attribute R numeric
+@attribute SpO2mean numeric
+@attribute SpO2min numeric
+@attribute 'SpO2<90\%' numeric
+@attribute 'Dips4\%' numeric
+@attribute 'Dips/h<4\%' numeric
+@attribute 'Dips3\%' numeric
+@attribute 'Dips/h<3\%' numeric
+@attribute Pattern numeric
+@attribute '\%VC' numeric
+@attribute '\%FVC' numeric
+@attribute '\%MIP' numeric
+@attribute '\%MEP' numeric
+@attribute '\%P0.1' numeric
+@attribute PO2 numeric
+@attribute PCO2 numeric
+@attribute peso numeric
+@attribute PhrenMeanLat numeric
+@attribute PhrenMeanAmpl numeric
+@attribute PhrenMeanArea numeric
+@attribute Evolution {Y,N}
