@@ -11,11 +11,11 @@ elif sys.platform == "win32":
     completeName = os.path.join('C:\\Users\\Lino\\Desktop','Evo.txt')
 for ntp in range(1,9):
     if sys.platform == "darwin":
-        path = '/Users/Lino/PycharmProjects/Preprocessing2/NTP/' + str(ntp) + 'TP'
+        path = '/Users/Lino/PycharmProjects/Preprocessing/NTP/' + str(ntp) + 'TP'
         completeName = os.path.join('/Users/Lino/Desktop', 'Evo_' + str(ntp) + 'TP.txt')
         Perf = open(completeName, 'a')
     elif sys.platform == "win32":
-        path = 'C:\\Users\\Lino\\PycharmProjects\\Preprocessing2\\NTP\\' + str(ntp) + 'TP'
+        path = 'C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\NTP\\' + str(ntp) + 'TP'
     sys.path.append(path)
     for window in Window:
         Data = pd.read_csv(path + '/' + str(window) + 'd_' + str(ntp) + '.csv')

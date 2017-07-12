@@ -8,11 +8,11 @@ import os
 
 
 if sys.platform == "darwin":
-    ALSFRS = pd.read_csv('/Users/Lino/PycharmProjects/Preprocessing2/alsfrs.csv', na_values=np.NaN)
-    Demographics = pd.read_csv('/Users/Lino/PycharmProjects/Preprocessing2/demo.csv', na_values=np.NaN)
+    ALSFRS = pd.read_csv('/Users/Lino/PycharmProjects/Preprocessing/alsfrs.csv', na_values=np.NaN)
+    Demographics = pd.read_csv('/Users/Lino/PycharmProjects/Preprocessing/demo.csv', na_values=np.NaN)
 elif sys.platform == "win32":
-    ALSFRS = pd.read_csv('C:\\Users\\Lino\\PycharmProjects\\Preprocessing2\\alsfrs.csv')
-    Demographics = pd.read_csv('C:\\Users\\Lino\\PycharmProjects\\Preprocessing2\\demo.csv')
+    ALSFRS = pd.read_csv('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\alsfrs.csv')
+    Demographics = pd.read_csv('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\demo.csv')
 
 
 Demographics = Demographics.values

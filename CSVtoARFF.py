@@ -8,9 +8,9 @@ Window = np.array([90, 180, 365])
 for window in Window:
     for seed in range(1,6):
         if sys.platform == 'win32':
-            path = 'C:\\Users\\Lino\\PycharmProjects\\Preprocessing2\\PreProcessedFolds\\' + str(window) + 'd_FOLDS\\S' + str(seed)
+            path = 'C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFolds\\' + str(window) + 'd_FOLDS\\S' + str(seed)
         elif sys.platform == 'darwin':
-            path = '/Users/Lino/PycharmProjects/Preprocessing2/PreProcessedFolds/' + str(window) + 'd_FOLDS/S' + str(seed)
+            path = '/Users/Lino/PycharmProjects/Preprocessing/PreProcessedFolds/' + str(window) + 'd_FOLDS/S' + str(seed)
         sys.path.append(path)
         for fold in range(1,11):
             try:
@@ -26,7 +26,7 @@ for window in Window:
             if sys.platform == 'win32':
                 directory = ('C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\PreProcessedFoldsARFF\\' + str(window) + 'd_FOLDS\\S' + str(seed) + '\\')
             elif sys.platform == 'darwin':
-                directory = ('/Users/Lino/PycharmProjects/Preprocessing2/PreProcessedFoldsARFF/' + str(window) + 'd_FOLDS/S' + str(seed) + '/')
+                directory = ('/Users/Lino/PycharmProjects/Preprocessing/PreProcessedFoldsARFF/' + str(window) + 'd_FOLDS/S' + str(seed) + '/')
             if not os.path.exists(directory):
                 os.makedirs(directory)
             completeName = os.path.join(directory, str(window) + 'd_FOLDS_train_' + str(fold) + '.arff')
