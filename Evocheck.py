@@ -11,7 +11,7 @@ elif sys.platform == "win32":
     completeName = os.path.join('C:\\Users\\Lino\\Desktop','Evo.txt')
 for window in Window:
     if sys.platform == "darwin":
-        completeName = os.path.join('/Users/Lino/Desktop', 'Evo_' + str(Window) + 'TP.csv')
+        completeName = os.path.join('/Users/Lino/Desktop', 'Evo_' + str(Window) + 'TP.txt')
         Perf = open(completeName, 'a')
         Perf.write('k,#TP,#Patients,Evo(Y),Evo(N)\n')
     elif sys.platform == "win32":
@@ -32,7 +32,7 @@ for window in Window:
         PY = (Y/len(Evo))*100
         PN = (N/len(Evo))*100
 
-        Perf.write(str(window) + ',' + str(ntp) + ','  + str(NumPatients) + ','  + str(Y) + '('+ str(round(PY,4)) +')' + ','  + str(N) + '('+ str(round(PN,4)) +')\n')
+        Perf.write(str(window) + ',' + str(ntp) + ','  + str(NumPatients) + ','  + str(Y) + '('+ str(round(PY,2)) +'%)' + ','  + str(N) + '('+ str(round(PN,2)) +'%)\n')
         #Perf.write('Y:' + str(Y) + '\n')
         #Perf.write('N:' + str(N) + '\n')
         #Perf.write('PY:' + str(PY) + '\n')
