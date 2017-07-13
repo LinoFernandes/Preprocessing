@@ -9,15 +9,18 @@ if sys.platform == "darwin":
     completeName = os.path.join('/Users/Lino/Desktop','Evo.txt')
 elif sys.platform == "win32":
     completeName = os.path.join('C:\\Users\\Lino\\Desktop','Evo.txt')
-for ntp in range(1,9):
+for window in Window:
     if sys.platform == "darwin":
-        path = '/Users/Lino/PycharmProjects/Preprocessing/NTP/' + str(ntp) + 'TP'
-        completeName = os.path.join('/Users/Lino/Desktop', 'Evo_' + str(ntp) + 'TP.txt')
+        completeName = os.path.join('/Users/Lino/Desktop', 'Evo_' + str(Window) + 'TP.csv')
         Perf = open(completeName, 'a')
+        Perf.write('k,#TP,#Patients,Evo(Y),Evo(N)\n')
     elif sys.platform == "win32":
         path = 'C:\\Users\\Lino\\PycharmProjects\\Preprocessing\\NTP\\' + str(ntp) + 'TP'
-    sys.path.append(path)
-    for window in Window:
+    for ntp in range(1,9):
+        if sys.platform == "darwin":
+            path = '/Users/Lino/PycharmProjects/Preprocessing/NTP/' + str(ntp) + 'TP'
+        sys.path.append(path)
+
         Data = pd.read_csv(path + '/' + str(window) + 'd_' + str(ntp) + '.csv')
 
         Evo = Data.iloc[:,len(Data.values[0])-1].values
@@ -29,12 +32,12 @@ for ntp in range(1,9):
         PY = (Y/len(Evo))*100
         PN = (N/len(Evo))*100
 
-        Perf.write('Window:' + str(window) + '\n')
-        Perf.write('Y:' + str(Y) + '\n')
-        Perf.write('N:' + str(N) + '\n')
-        Perf.write('PY:' + str(PY) + '\n')
-        Perf.write('PN:' + str(PN) + '\n')
-        Perf.write('#Pat:' + str(NumPatients) + '\n')
+        Perf.write(str(window) + ',' + str(ntp) + ','  + str(NumPatients) + ','  + str(Y) + '('+ str(round(PY,4)) +')' + ','  + str(N) + '('+ str(round(PN,4)) +')\n')
+        #Perf.write('Y:' + str(Y) + '\n')
+        #Perf.write('N:' + str(N) + '\n')
+        #Perf.write('PY:' + str(PY) + '\n')
+        #Perf.write('PN:' + str(PN) + '\n')
+        #Perf.write('#Pat:' + str(NumPatients) + '\n')
 
 
 
